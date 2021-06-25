@@ -51,6 +51,7 @@ objects/*
 
 # fdf files
 */*.fdf
+fdf
 
 # vscode settings
 .vscode/
