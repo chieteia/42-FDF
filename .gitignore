@@ -11,6 +11,7 @@
 *.ilk
 *.map
 *.exp
+objects/*
 
 # Precompiled Headers
 *.gch
@@ -46,10 +47,13 @@
 .*
 
 # text files
-*.txt
+*/*.txt
 
 # fdf files
-*.fdf
+*/*.fdf
+
+# vscode settings
+.vscode/
 
 # Kernel Module Compile Results
 *.mod*
