@@ -4,6 +4,14 @@
 #define MAX(a, b) ((a) > (b) ? (a) : b)
 #define ABS(a) ((a) < 0 ? -(a) : (a)
 
+void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = fdf->addr + (y * fdf->line_length + x * (fdf->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+
 float get_percent(int start, int end, int current)
 {
 	float position;
@@ -129,7 +137,8 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 		//ft_putnbr_fd(current.y, 2);
 		//ft_putchar_fd(')', 2);
 		//ft_putchar_fd('\n', 2);
-		mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
+		//mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
+		my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
 		if (current.x == end.x && current.y == end.y)
 			break;
 		err[1] = 2 * err[0];

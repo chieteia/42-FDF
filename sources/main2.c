@@ -43,9 +43,6 @@ int main(int argc, char **argv)
 	(void)argc;
 	fdf = init_fdf(argv[1]);
 	read_file(fdf->map);;
-
-	fdf->mlx = mlx_init();
-	fdf->win = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FDF");
 	//mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, (int)x, (int)y, 0xFFFFFF);
 
 	//t_point start;
