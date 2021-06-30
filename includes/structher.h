@@ -62,6 +62,8 @@ typedef struct s_camera
 	float	gamma;
 }				t_camera;
 
+
+
 typedef struct s_fdf
 {
 	void	*mlx;

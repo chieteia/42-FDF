@@ -46,8 +46,8 @@ t_fdf	*init_fdf(char *file_name)
 	fdf->camera = init_camera();
 	fdf->mlx = mlx_init();
 	fdf->win = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FDF");
-	fdf->img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
-	fdf->addr = mlx_get_data_addr(fdf->img, &(fdf->bits_per_pixel),
-									&(fdf->line_length), &(fdf->endian));
+	//fdf->img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	//fdf->addr = mlx_get_data_addr(fdf->img, &(fdf->bits_per_pixel),
+	//								&(fdf->line_length), &(fdf->endian));
 	return (fdf);
 }

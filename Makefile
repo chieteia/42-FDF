@@ -17,7 +17,7 @@ LXFLAGS		=	-framework OpenGL -framework AppKit
 RM			=	rm -f
 RM_DIR		=	rm -rf
 
-SRCS_FILES	=	main2.c\
+SRCS_FILES	=	main.c\
 				draw.c\
 				control.c\
 				init_utils.c\

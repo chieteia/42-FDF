@@ -6,10 +6,14 @@
 
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 {
-	char	*dst;
-
-	dst = fdf->addr + (y * fdf->line_length + x * (fdf->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	int i;
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{
+		i = (y * fdf->line_length) + x * (fdf->bits_per_pixel / 8);
+		fdf->addr[i] = color;
+		fdf->addr[++i] = color >>8;
+		fdf->addr[++i] = color >> 16;
+	}
 }
 
 float get_percent(int start, int end, int current)
@@ -137,8 +141,8 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 		//ft_putnbr_fd(current.y, 2);
 		//ft_putchar_fd(')', 2);
 		//ft_putchar_fd('\n', 2);
-		//mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
-		my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
+		mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
+		//my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
 		//if (current.x == end.x && current.y == end.y)
 		//	break;
 		err[1] = 2 * err[0];
@@ -153,7 +157,6 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 			current.y += step.y;
 		}
 	}
-	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 }
 
 //int	gradient(int x, int y, int x_dist, int y_dist, t_fdf *fdf)
@@ -184,4 +187,5 @@ void draw(t_fdf *fdf)
 		}
 		y++;
 	}
+	//mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 }
