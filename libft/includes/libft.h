@@ -9,9 +9,6 @@
 # include <stdbool.h>
 # include <stdio.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
 # define FAILED -1
 # define OK 1
 # define TRUE 1

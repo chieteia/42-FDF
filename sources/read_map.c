@@ -47,9 +47,9 @@ void	check_current_map_width(char **parsed_line, t_admin *master)
 	current_width = 0;
 	while (parsed_line[++index])
 		current_width++;
-	if (master->map->height == 0)
-		master->map->width = current_width;
-	else if (master->map->width > current_width)
+	if (master->height == 0)
+		master->width = current_width;
+	else if (master->width > current_width)
 		terminate(ERR_MAP_COMPOSITION);
 }
 
@@ -87,7 +87,7 @@ void	read_map(const int fd, t_admin *master, t_list **map_data)
 		get_map_data_by_line(parsed_line, master, map_data);
 		free_str_array(&parsed_line);
 		safe_free((void**)&line);
-		master->map->height++;
+		master->height++;
 	}
 	if (!(*map_data))
 		terminate(ERR_EMPTY_MAP);

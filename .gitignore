@@ -36,6 +36,7 @@ objects/*
 *.i*86
 *.x86_64
 *.hex
+fdf
 
 # Debug files
 *.dSYM/
@@ -49,9 +50,8 @@ objects/*
 # text files
 *.txt
 
-# fdf files
-*/*.fdf
-fdf
+# test files
+test*.c
 
 # vscode settings
 .vscode/
