@@ -22,8 +22,6 @@ int	press_keys(int key, t_fdf *fdf)
 		fdf->camera->z_divisor -= 0.1;
 	if (key == 53)
 		exit(0);
-
-	mlx_clear_window(fdf->mlx, fdf->win);
 	draw(fdf);
 	return (0);
 }

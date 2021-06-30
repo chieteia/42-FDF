@@ -7,8 +7,8 @@
 # include "get_next_line.h"
 # include "error_msg.h"
 
-# define WIDTH 1024
-# define HEIGHT 640
+# define WIDTH 1920
+# define HEIGHT 1080
 # define Z_VALUE 0
 # define COLOR_VALUE 1
 

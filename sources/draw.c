@@ -141,8 +141,8 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 		//ft_putnbr_fd(current.y, 2);
 		//ft_putchar_fd(')', 2);
 		//ft_putchar_fd('\n', 2);
-		mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
-		//my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
+		//mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
+		my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
 		if (current.x == end.x && current.y == end.y)
 			break;
 		err[1] = 2 * err[0];
@@ -187,5 +187,5 @@ void draw(t_fdf *fdf)
 		}
 		y++;
 	}
-	//mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 }
