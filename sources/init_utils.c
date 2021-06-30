@@ -27,10 +27,10 @@ t_camera	*init_camera(void)
 	t_camera	 *camera;
 
 	camera = malloc(sizeof(camera));
-	camera->zoom = 1;
+	camera->zoom = 10;
 	camera->z_divisor = 1;
-	camera->shift_x = 0;
-	camera->shift_y = 0;
+	camera->shift_x = 256;
+	camera->shift_y = 160;
 	camera->alpha = 0;
 	camera->beta = 0;;
 	camera->gamma = 0;

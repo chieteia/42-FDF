@@ -2,17 +2,24 @@ FDF			=	fdf
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
 DEBUG_FLAGS	=	-Wall -Wextra -Werror -g
-INCLUDES	=	$(addprefix -I, $(HEADERS))
-HEADERS		=	$(INC_DIR)includes/ $(LIB_DIR)includes/ $(MLX_DIR)includes/ \
-				$(MLX_DIR)
+
+INC_DIR		=	./
+SRCS_DIR	=	sources/
+OBJ_DIR		=	objects/
+LIB_DIR		=	libft/
+MLX_DIR		=	minilibx_macos/
+
+HEADERS		=	$(INC_DIR)includes/ $(LIB_DIR)includes/ $(MLX_DIR)
 LIBFT		=	$(LIB_DIR)libft.a
 LIBMLX		=	$(MLX_DIR)libmlx.a
+INCLUDES	=	$(addprefix -I, $(HEADERS))
 LXFLAGS		=	-framework OpenGL -framework AppKit
 RM			=	rm -f
 RM_DIR		=	rm -rf
 
 SRCS_FILES	=	main2.c\
 				draw.c\
+				control.c\
 				init_utils.c\
 				read_file.c\
 				terminate.c\
@@ -22,12 +29,6 @@ OBJ_FILES	=	$(SRCS_FILES:.c=.o)
 
 SRCS		=	$(addprefix $(SRCS_DIR),$(SRCS_FILES))
 OBJS		=	$(addprefix $(OBJ_DIR), $(OBJ_FILES))
-
-INC_DIR		=	./
-SRCS_DIR	=	sources/
-OBJ_DIR		=	objects/
-LIB_DIR		=	libft/
-MLX_DIR		=	minilibx_macos/
 
 .PHONY: all clean fclean re debug
 

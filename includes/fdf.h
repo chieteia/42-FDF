@@ -7,6 +7,8 @@
 # include "get_next_line.h"
 # include "error_msg.h"
 
+# define WIDTH 1024
+# define HEIGHT 640
 # define Z_VALUE 0
 # define COLOR_VALUE 1
 
@@ -43,5 +45,8 @@ void	draw(t_fdf *data);
 t_map		*init_map(char *file_name);
 t_camera	*init_camera(void);
 t_fdf		*init_fdf(char *file_name);
+
+// control
+void	deal_keys(t_fdf *fdf);
 
 #endif
