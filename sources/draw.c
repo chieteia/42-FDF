@@ -133,7 +133,7 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 	current.x = start.x;
 	current.y = start.y;
 	err[0] = delta.x - delta.y;
-	while (current.x == end.x && current.y == end.y)
+	while (1)
 	{
 		//ft_putchar_fd('(', 2);
 		//ft_putnbr_fd(current.x, 2);
@@ -143,8 +143,8 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 		//ft_putchar_fd('\n', 2);
 		mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
 		//my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
-		//if (current.x == end.x && current.y == end.y)
-		//	break;
+		if (current.x == end.x && current.y == end.y)
+			break;
 		err[1] = 2 * err[0];
 		if (err[1] > -delta.y)
 		{
