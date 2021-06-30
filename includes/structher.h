@@ -33,8 +33,9 @@ typedef struct s_admin
 
 typedef struct s_map
 {
-	int		width;
+	char	*name;
 	int		height;
+	int		width;
 	int		**z_matrix;
 	int		**color_matrix;
 	int		z_min;
@@ -50,15 +51,19 @@ typedef struct s_map
 //	int		endian;
 //}				t_data;
 
+typedef struct s_camera
+{
+	int		zoom;
+	float	z_divisor;
+	int		shift_x;
+	int		shift_y;
+	float	alpha;
+	float	beta;
+	float	gamma;
+}				t_camera;
+
 typedef struct s_fdf
 {
-	int		width;
-	int		height;
-	int		**z_matrix;
-	int		**color_matrix;
-	int		z_min;
-	int		z_max;
-
 	void	*mlx;
 	void	*win;
 	void	*img;
@@ -67,11 +72,8 @@ typedef struct s_fdf
 	int		line_length;
 	int		endian;
 
-	int		zoom;
-	int		color;
-	int		flatten;
-	int		shift_x;
-	int		shift_y;
+	t_camera	*camera;
+	t_map		*map;
 }				t_fdf;
 
 #endif

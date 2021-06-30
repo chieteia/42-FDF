@@ -13,7 +13,7 @@ RM_DIR		=	rm -rf
 
 SRCS_FILES	=	main2.c\
 				draw.c\
-				init_master.c\
+				init_utils.c\
 				read_file.c\
 				terminate.c\
 				utils.c

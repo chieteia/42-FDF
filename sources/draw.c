@@ -4,14 +4,6 @@
 #define MAX(a, b) ((a) > (b) ? (a) : b)
 #define ABS(a) ((a) < 0 ? -(a) : (a)
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
 float get_percent(int start, int end, int current)
 {
 	float position;
@@ -64,44 +56,44 @@ void isometric(int *x, int *y, int z)
 	*y = (previous_x + previous_y) * sin(0.523599) - z;
 }
 
-t_point new_point(int x, int y, t_fdf *data)
+t_point new_point(int x, int y, t_fdf *fdf)
 {
 	t_point point;
 
 	point.x = x;
 	point.y = y;
-	point.z = data->z_matrix[y][x];
-	if (data->color_matrix[y][x] == -1)
-		point.color = default_color(point.z, data);
+	point.z = fdf->map->z_matrix[y][x];
+	if (fdf->map->color_matrix[y][x] == -1)
+		point.color = default_color(point.z, fdf->map);
 	else
-		point.color = data->color_matrix[y][x];
+		point.color = fdf->map->color_matrix[y][x];
 	return (point);
 }
 
-void bresenham(t_point start, t_point end, t_fdf *data)
+void bresenham(t_point start, t_point end, t_fdf *fdf)
 {
 	//float	x_step;
 	//float	y_step;
 	//float	max;
 	//t_point	current;
 	////zoom
-	start.x *= data->zoom;
-	start.y *= data->zoom;
-	end.x *= data->zoom;
-	end.y *= data->zoom;
+	start.x *= fdf->camera->zoom;
+	start.y *= fdf->camera->zoom;
+	end.x *= fdf->camera->zoom;
+	end.y *= fdf->camera->zoom;
 	////flatten
-	start.z *= data->flatten;
-	end.z *= data->flatten;
+	start.z *= fdf->camera->zoom / fdf->camera->z_divisor;
+	end.z *= fdf->camera->zoom / fdf->camera->z_divisor;
 	//color
-	//data->color = (z || z1) ? (0xffa500) : (0xffffff);
+	//fdf->color = (z || z1) ? (0xffa500) : (0xffffff);
 	//3D
 	isometric(&start.x, &start.y, start.z);
 	isometric(&end.x, &end.y, end.z);
 	//Shift
-	start.x += data->shift_x;
-	start.y += data->shift_y;
-	end.x += data->shift_x;
-	end.y += data->shift_y;
+	start.x += fdf->camera->shift_x;
+	start.y += fdf->camera->shift_y;
+	end.x += fdf->camera->shift_x;
+	end.y += fdf->camera->shift_y;
 
 	//x_step = start.x - end.x;
 	//y_step = start.y - end.y;
@@ -113,7 +105,7 @@ void bresenham(t_point start, t_point end, t_fdf *data)
 	//current.y = start.y;
 	//while((int)(current.x - end.x) || (int)(current.y - end.y))
 	//{
-	//	mlx_pixel_put(data->mlx_ptr, data->win_ptr, current.x, current.y, 0xffffff);
+	//	mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, current.x, current.y, 0xffffff);
 	//	current.x += x_step;
 	//	current.y += y_step;
 	//}
@@ -129,7 +121,6 @@ void bresenham(t_point start, t_point end, t_fdf *data)
 	current.x = start.x;
 	current.y = start.y;
 	err[0] = delta.x - delta.y;
-	err[1] = 0;
 	while (1)
 	{
 		//ft_putchar_fd('(', 2);
@@ -138,7 +129,7 @@ void bresenham(t_point start, t_point end, t_fdf *data)
 		//ft_putnbr_fd(current.y, 2);
 		//ft_putchar_fd(')', 2);
 		//ft_putchar_fd('\n', 2);
-		mlx_pixel_put(data->mlx, data->win, current.x, current.y, get_color(current, start, end, delta));
+		mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
 		if (current.x == end.x && current.y == end.y)
 			break;
 		err[1] = 2 * err[0];
@@ -155,7 +146,7 @@ void bresenham(t_point start, t_point end, t_fdf *data)
 	}
 }
 
-//int	gradient(int x, int y, int x_dist, int y_dist, t_fdf *data)
+//int	gradient(int x, int y, int x_dist, int y_dist, t_fdf *fdf)
 //{
 //	int	red;
 //	int	green;
@@ -164,21 +155,21 @@ void bresenham(t_point start, t_point end, t_fdf *data)
 //	red =
 //}
 
-void draw(t_fdf *data)
+void draw(t_fdf *fdf)
 {
 	int x;
 	int y;
 
 	y = 0;
-	while (y < data->height)
+	while (y < fdf->map->height)
 	{
 		x = 0;
-		while (x < data->width)
+		while (x < fdf->map->width)
 		{
-			if (x < data->width - 1)
-				bresenham(new_point(x, y, data), new_point(x + 1, y, data), data);
-			if (y < data->height - 1)
-				bresenham(new_point(x, y, data), new_point(x, y + 1, data), data);
+			if (x < fdf->map->width - 1)
+				bresenham(new_point(x, y, fdf), new_point(x + 1, y, fdf), fdf);
+			if (y < fdf->map->height - 1)
+				bresenham(new_point(x, y, fdf), new_point(x, y + 1, fdf), fdf);
 			x++;
 		}
 		y++;

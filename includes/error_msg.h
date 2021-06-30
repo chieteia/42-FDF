@@ -3,7 +3,7 @@
 
 # define ERR_OPEN_FILE "Failed to open file. Exiting.\n"
 
-# define ERR_INIT "Malloc failed when initializing variable. Exiting.\n"
+# define ERR_INIT_MAP "Malloc failed when initializing map. Exiting.\n"
 
 # define ERR_READ_MAP "Error occurred while reading map. Exiting.\n"
 # define ERR_EMPTY_MAP "No data found. Exiting.\n"

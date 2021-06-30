@@ -117,18 +117,18 @@ void	fill_z_line(int *z_line, char *line)
 //		return (0xe5004f);
 //}
 
-int	default_color(int z, t_fdf *data)
+int	default_color(int z, t_map *map)
 {
 	float	percent;
 
-	//ratio = get_ratio_of_abs(z, data->z_min, data->z_max);
+	//ratio = get_ratio_of_abs(z, map->z_min, map->z_max);
 	//if (z < 0)
 	//	return (get_cold_color(ratio));
 	//else if (z > 0)
 	//	return (get_warm_color(ratio));
 	//else
 	//	return (WHITE);
-	percent = get_percent(data->z_min, data->z_max, z);
+	percent = get_percent(map->z_min, map->z_max, z);
 	if (percent < 0.25)
 		return (0x392270);
 	else if (percent < 0.5)
@@ -139,7 +139,7 @@ int	default_color(int z, t_fdf *data)
 		return (0xe9275b);
 }
 
-void	fill_color_line(int *color_line, int *z_line, t_fdf *data, char *line)
+void	fill_color_line(int *color_line, int *z_line, t_map *map, char *line)
 {
 	char	**nums;
 	char	**portion;
@@ -153,7 +153,7 @@ void	fill_color_line(int *color_line, int *z_line, t_fdf *data, char *line)
 		if (portion[COLOR_VALUE])
 			color_line[i] = ft_atoi(portion[COLOR_VALUE]);
 		else
-			color_line[i] = default_color(z_line[i], data);
+			color_line[i] = default_color(z_line[i], map);
 		free(nums[i]);
 		free(portion);
 		i++;
@@ -161,80 +161,66 @@ void	fill_color_line(int *color_line, int *z_line, t_fdf *data, char *line)
 	free(nums);
 }
 
-void	fill_z_matrix(char *file_name, t_fdf *data)
+void	fill_z_matrix(t_map *map)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
-	fd = open(file_name, O_RDONLY);
+	fd = open(map->name, O_RDONLY);
 	i = 0;
 	while(get_next_line(fd, &line))
 	{
-		fill_z_line(data->z_matrix[i], line);
+		fill_z_line(map->z_matrix[i], line);
 		free(line);
 		i++;
 	}
 	close(fd);
-	data->z_matrix[i] = NULL;
+	map->z_matrix[i] = NULL;
 }
 
-void	fill_color_matrix(char *file_name, t_fdf *data)
+void	fill_color_matrix(t_map *map)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
-	fd = open(file_name, O_RDONLY);
+	fd = open(map->name, O_RDONLY);
 	i = 0;
 	while(get_next_line(fd, &line))
 	{
-		fill_color_line(data->color_matrix[i], data->z_matrix[i], data, line);
+		fill_color_line(map->color_matrix[i], map->z_matrix[i], map, line);
 		free(line);
 		i++;
 	}
 	close(fd);
-	data->color_matrix[i] = NULL;
+	map->color_matrix[i] = NULL;
 }
 
-void	get_z_range(t_fdf *data)
+void	get_z_range(t_map *map)
 {
 	int	x;
 	int	y;
 
 	y = 0;
-	while (y < data->height)
+	while (y < map->height)
 	{
 		x = 0;
-		while (x < data->width)
+		while (x < map->width)
 		{
-			if (data->z_max < data->z_matrix[y][x])
-				data->z_max = data->z_matrix[y][x];
-			if (data->z_min > data->z_matrix[y][x])
-				data->z_min = data->z_matrix[y][x];
+			if (map->z_max < map->z_matrix[y][x])
+				map->z_max = map->z_matrix[y][x];
+			if (map->z_min > map->z_matrix[y][x])
+				map->z_min = map->z_matrix[y][x];
 			x++;
 		}
 		y++;
 	}
 }
 
-void	read_file(char *file_name, t_fdf *data)
+void	read_file(t_map *map)
 {
-	int	i;
-
-	data->height = get_height(file_name);
-	data->width = get_width(file_name);
-
-	data->z_matrix = malloc(sizeof(int*) * (data->height + 1));
-	data->color_matrix = malloc(sizeof(int*) * (data->height + 1));
-	i = 0;
-	while(i <= data->height)
-	{
-		data->z_matrix[i] = malloc(sizeof(int) * (data->width + 1));
-		data->color_matrix[i] = malloc(sizeof(int) * (data->width + 1));
-		i++;
-	}
-	fill_z_matrix(file_name, data);
-	get_z_range(data);
-	fill_color_matrix(file_name, data);
+	fill_z_matrix(map);
+	get_z_range(map);
+	fill_color_matrix(map);
 }

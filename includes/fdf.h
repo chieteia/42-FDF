@@ -28,15 +28,20 @@ void	free_str_array(char ***array);
 char	**parsed_by_char(char *line, char c);
 int		count_word(const char *s, char c);
 
-void	read_file(char *file_name, t_fdf *data);
+void	read_file(t_map *map);
 void	fill_matrix(int *z_line, int *color_matrix, char *line);
 int		get_width(char *file_name);
 int 	get_height(char *file_name);
 float	get_ratio_of_abs(int num, int min, int max);
-int		default_color(int z, t_fdf *data);
+int		default_color(int z, t_map *map);
 
 void	bresenham(t_point start, t_point end, t_fdf *data);
 float	get_percent(int start, int end, int current);
 void	draw(t_fdf *data);
+
+// init_utils
+t_map		*init_map(char *file_name);
+t_camera	*init_camera(void);
+t_fdf		*init_fdf(char *file_name);
 
 #endif
