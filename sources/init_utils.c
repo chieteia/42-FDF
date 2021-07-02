@@ -21,12 +21,9 @@
 //	close(fd);
 //}
 
-void	list_to_array(t_map *map, t_list *map_data)
+void	malloc_array(t_map *map)
 {
-	int		i;
-	int		x;
-	int		y;
-	t_data	*tmp;
+	int	i;
 
 	i = 0;
 	map->z_matrix = malloc(sizeof(int*) * (map->height + 1));
@@ -45,6 +42,14 @@ void	list_to_array(t_map *map, t_list *map_data)
 			terminate(ERR_MALLOC);
 		i++;
 	}
+}
+
+void	copy_to_array(t_map *map, t_list *map_data)
+{
+	int		x;
+	int		y;
+	t_data	*tmp;
+
 	y = -1;
 	while (++y < map->height)
 	{
@@ -57,6 +62,47 @@ void	list_to_array(t_map *map, t_list *map_data)
 			map_data = map_data->next;
 		}
 	}
+}
+
+void	list_to_array(t_map *map, t_list **map_data)
+{
+	//int		i;
+	//int		x;
+	//int		y;
+	//t_data	*tmp;
+
+//	i = 0;
+//	map->z_matrix = malloc(sizeof(int*) * (map->height + 1));
+//	if (!map->z_matrix)
+//		terminate(ERR_MALLOC);
+//	map->color_matrix = malloc(sizeof(int*) * (map->height + 1));
+//	if (!map->color_matrix)
+//		terminate(ERR_MALLOC);
+//	while(i < map->height)
+//	{
+//		map->z_matrix[i] = malloc(sizeof(int) * map->width);
+//		if (!map->z_matrix[i])
+//			terminate(ERR_MALLOC);
+//		map->color_matrix[i] = malloc(sizeof(int) * map->width);
+//		if (!map->color_matrix[i])
+//			terminate(ERR_MALLOC);
+//		i++;
+//	}
+	//y = -1;
+	//while (++y < map->height)
+	//{
+	//	x = -1;
+	//	while (++x < map->width)
+	//	{
+	//		tmp = (t_data*)(map_data->content);
+	//		map->z_matrix[y][x] = tmp->z;
+	//		map->color_matrix[y][x] = tmp->color;
+	//		map_data = map_data->next;
+	//	}
+	//}
+	malloc_array(map);
+	copy_to_array(map, *map_data);
+	ft_lstclear(map_data, free);
 }
 
 t_map	*init_map(char *file_name)
@@ -82,7 +128,8 @@ t_map	*init_map(char *file_name)
 	map->height = size[MAP_HEIGHT];
 	map->z_min = INT_MAX;
 	map->z_max = INT_MIN;
-	list_to_array(map, map_data);
+	list_to_array(map, &map_data);
+	//ft_lstclear(&map_data, free);
 	return (map);
 }
 
@@ -93,8 +140,8 @@ t_camera	*init_camera(void)
 	camera = malloc(sizeof(camera));
 	camera->zoom = 10;
 	camera->z_divisor = 1;
-	camera->shift_x = 256;
-	camera->shift_y = 160;
+	camera->shift_x = 0;
+	camera->shift_y = 0;
 	camera->alpha = 0;
 	camera->beta = 0;;
 	camera->gamma = 0;

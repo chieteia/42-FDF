@@ -1,7 +1,7 @@
 FDF			=	fdf
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
-DEBUG_FLAGS	=	-Wall -Wextra -Werror
+DEBUG_FLAGS	=	-Wall -Wextra -Werror -g
 
 INC_DIR		=	./
 SRCS_DIR	=	sources/

@@ -34,6 +34,7 @@ char	**parsed_by_char(char *line, char c);
 int		count_word(const char *s, char c);
 int		default_color(int z, t_map *map);
 
+t_data	*new_data(char *str);
 void	read_file(t_map *map);
 void	check_map_form(t_map *map);
 void	fill_matrix(int *z_line, int *color_matrix, char *line);
