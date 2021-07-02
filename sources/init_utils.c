@@ -66,40 +66,6 @@ void	copy_to_array(t_map *map, t_list *map_data)
 
 void	list_to_array(t_map *map, t_list **map_data)
 {
-	//int		i;
-	//int		x;
-	//int		y;
-	//t_data	*tmp;
-
-//	i = 0;
-//	map->z_matrix = malloc(sizeof(int*) * (map->height + 1));
-//	if (!map->z_matrix)
-//		terminate(ERR_MALLOC);
-//	map->color_matrix = malloc(sizeof(int*) * (map->height + 1));
-//	if (!map->color_matrix)
-//		terminate(ERR_MALLOC);
-//	while(i < map->height)
-//	{
-//		map->z_matrix[i] = malloc(sizeof(int) * map->width);
-//		if (!map->z_matrix[i])
-//			terminate(ERR_MALLOC);
-//		map->color_matrix[i] = malloc(sizeof(int) * map->width);
-//		if (!map->color_matrix[i])
-//			terminate(ERR_MALLOC);
-//		i++;
-//	}
-	//y = -1;
-	//while (++y < map->height)
-	//{
-	//	x = -1;
-	//	while (++x < map->width)
-	//	{
-	//		tmp = (t_data*)(map_data->content);
-	//		map->z_matrix[y][x] = tmp->z;
-	//		map->color_matrix[y][x] = tmp->color;
-	//		map_data = map_data->next;
-	//	}
-	//}
 	malloc_array(map);
 	copy_to_array(map, *map_data);
 	ft_lstclear(map_data, free);
@@ -121,15 +87,12 @@ t_map	*init_map(char *file_name)
 	map = malloc(sizeof(t_map));
 	if (!map)
 		terminate(ERR_MALLOC);
-	//if (!ft_malloc((void**)&map, sizeof(map), 1))
-	//	terminate(ERR_MALLOC);
 	map->name = file_name;
 	map->width = size[MAP_WIDTH];
 	map->height = size[MAP_HEIGHT];
 	map->z_min = INT_MAX;
 	map->z_max = INT_MIN;
 	list_to_array(map, &map_data);
-	//ft_lstclear(&map_data, free);
 	return (map);
 }
 
