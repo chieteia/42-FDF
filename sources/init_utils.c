@@ -1,26 +1,5 @@
 #include "fdf.h"
 
-//bool	check_map(char *file_name, int width, int height)
-//{
-//	int		fd;
-//	int		res;
-//	char	*line;
-
-//	if (height == 0)
-//		terminate(ERR_EMPTY_MAP);
-//	fd = open(file_name, O_RDONLY);
-//	while (1)
-//	{
-//		res = get_next_line(fd, file_name);
-//		if (res < 0)
-//			terminate(ERR_READ_MAP);
-//		if (width != count_word(line, ' '))
-//			terminate(ERR_MAP_COMPOSITION);
-//		safe_free((void **)&line);
-//	}
-//	close(fd);
-//}
-
 void	malloc_array(t_map *map)
 {
 	int	i;
