@@ -21,37 +21,68 @@
 //	close(fd);
 //}
 
+void	list_to_array(t_map *map, t_list *map_data)
+{
+	int		i;
+	int		x;
+	int		y;
+	t_data	*tmp;
+
+	i = 0;
+	map->z_matrix = malloc(sizeof(int*) * (map->height + 1));
+	if (!map->z_matrix)
+		terminate(ERR_MALLOC);
+	map->color_matrix = malloc(sizeof(int*) * (map->height + 1));
+	if (!map->color_matrix)
+		terminate(ERR_MALLOC);
+	while(i < map->height)
+	{
+		map->z_matrix[i] = malloc(sizeof(int) * map->width);
+		if (!map->z_matrix[i])
+			terminate(ERR_MALLOC);
+		map->color_matrix[i] = malloc(sizeof(int) * map->width);
+		if (!map->color_matrix[i])
+			terminate(ERR_MALLOC);
+		i++;
+	}
+	y = -1;
+	while (++y < map->height)
+	{
+		x = -1;
+		while (++x < map->width)
+		{
+			tmp = (t_data*)(map_data->content);
+			map->z_matrix[y][x] = tmp->z;
+			map->color_matrix[y][x] = tmp->color;
+			map_data = map_data->next;
+		}
+	}
+}
+
 t_map	*init_map(char *file_name)
 {
 	t_map		*map;
 	t_list		*map_data;
 	int			fd;
-	int			i;
 	static int	size[2];
 
+	map_data = NULL;
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		terminate(ERR_OPEN_FILE);
-	map_data = NULL;
 	read_map(fd, size, &map_data);
+	close(fd);
 	map = malloc(sizeof(t_map));
+	if (!map)
+		terminate(ERR_MALLOC);
+	//if (!ft_malloc((void**)&map, sizeof(map), 1))
+	//	terminate(ERR_MALLOC);
 	map->name = file_name;
 	map->width = size[MAP_WIDTH];
 	map->height = size[MAP_HEIGHT];
-	printf("height : %d width : %d\n", map->height, map->width);
-	exit(0);
-	check_map_form(map);
-	map->z_matrix = malloc(sizeof(int*) * (map->height + 1));
-	map->color_matrix = malloc(sizeof(int*) * (map->height + 1));
-	i = 0;
-	while(i <= map->height)
-	{
-		map->z_matrix[i] = malloc(sizeof(int) * map->width);
-		map->color_matrix[i] = malloc(sizeof(int) * map->width);
-		i++;
-	}
 	map->z_min = INT_MAX;
 	map->z_max = INT_MIN;
+	list_to_array(map, map_data);
 	return (map);
 }
 
@@ -76,6 +107,16 @@ t_fdf	*init_fdf(char *file_name)
 
 	fdf = malloc(sizeof(t_fdf));
 	fdf->map = init_map(file_name);
+	printf("height : %d width : %d\n", fdf->map->height, fdf->map->width);
+	for (int i = 0; i < fdf->map->height; i++)
+	{
+		for (int j = 0; j < fdf->map->width; j++)
+		{
+			printf("%3d", fdf->map->z_matrix[i][j]);
+		}
+		printf("\n");
+	}
+	exit(0);
 	fdf->mlx = mlx_init();
 	fdf->win = mlx_new_window(fdf->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "FDF");
 	fdf->img = mlx_new_image(fdf->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);

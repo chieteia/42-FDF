@@ -11,8 +11,11 @@ t_data	*get_map_data(char **parsed_str)
 {
 	t_data	*new;
 
-	if(!ft_malloc((void **)&new, sizeof(t_data), 1))
+	new = malloc(sizeof(t_data));
+	if (!new)
 		terminate(ERR_MALLOC);
+	//if(!ft_malloc((void **)&new, sizeof(t_data), 1))
+	//	terminate(ERR_MALLOC);
 	new->z = ft_atoi(parsed_str[0]);
 	if (parsed_str[1])
 		new->color = ft_atoi_base(parsed_str[1], 16);
