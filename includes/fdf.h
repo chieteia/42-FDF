@@ -7,8 +7,11 @@
 # include "get_next_line.h"
 # include "error_msg.h"
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define MAP_WIDTH 0
+# define MAP_HEIGHT 1
+
+# define SCREEN_WIDTH 1920
+# define SCREEN_HEIGHT 1080
 # define Z_VALUE 0
 # define COLOR_VALUE 1
 
@@ -24,13 +27,15 @@ t_admin	*init_master();
 
 void	terminate(char *s);
 
-void	read_map(const int fd, t_admin *master, t_list **map_data);
+void	read_map(const int fd, int *size, t_list **map_data);
 
 void	free_str_array(char ***array);
 char	**parsed_by_char(char *line, char c);
 int		count_word(const char *s, char c);
+int		default_color(int z, t_map *map);
 
 void	read_file(t_map *map);
+void	check_map_form(t_map *map);
 void	fill_matrix(int *z_line, int *color_matrix, char *line);
 int		get_width(char *file_name);
 int 	get_height(char *file_name);

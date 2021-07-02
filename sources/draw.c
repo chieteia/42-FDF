@@ -7,7 +7,7 @@
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 {
 	int i;
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
 	{
 		i = (y * fdf->line_length) + x * (fdf->bits_per_pixel / 8);
 		fdf->addr[i] = color;

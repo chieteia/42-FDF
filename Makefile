@@ -1,7 +1,7 @@
 FDF			=	fdf
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
-DEBUG_FLAGS	=	-Wall -Wextra -Werror -g
+DEBUG_FLAGS	=	-Wall -Wextra -Werror
 
 INC_DIR		=	./
 SRCS_DIR	=	sources/
@@ -17,11 +17,11 @@ LXFLAGS		=	-framework OpenGL -framework AppKit
 RM			=	rm -f
 RM_DIR		=	rm -rf
 
-SRCS_FILES	=	main.c\
+SRCS_FILES	=	main2.c\
 				draw.c\
 				control.c\
 				init_utils.c\
-				read_file.c\
+				read_map.c\
 				terminate.c\
 				utils.c
 

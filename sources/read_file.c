@@ -12,35 +12,75 @@ float	get_ratio_of_abs(int num, int min, int max)
 	//return ((range == 0) ? 1.0 : (position / range));
 }
 
+//int gnl_check(int fd, char **line)
+//{
+//	int res;
+
+//	res = get_next_line(fd, line);
+//	if (res > 0)
+//		return (1);
+//	if (res < 0)
+//		terminate(ERR_READ_MAP);
+//	if (res == 0 && **line)
+//		return (1);
+//	else
+//		return (0);
+//}
+
+void	check_map_form(t_map *map)
+{
+	int		fd;
+	int		res;
+	int		cnt;
+	char	*line;
+
+	if (map->height == 0 || map->width == 0)
+		terminate(ERR_INCORRECT_MAP);
+	fd = open(map->name, O_RDONLY);
+	if (fd < 0)
+		terminate(ERR_OPEN_FILE);
+	while (1)
+	{
+		res = get_next_line(fd, &line);
+		if (res < 0)
+			terminate(ERR_READ_MAP);
+		if (res == 0 && !*line)
+			break;
+		cnt = count_word(line, ' ');
+		printf("cnt : %d\n", cnt);
+		printf("line : %s\n", line);
+		if (map->width != cnt)
+			terminate(ERR_INCORRECT_MAP);
+		safe_free((void**)&line);
+	}
+	safe_free((void**)&line);
+	close(fd);
+}
+
 int get_height(char *file_name)
 {
 	int		fd;
+	int		res;
 	int		height;
 	char	*line;
 
 	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
+		terminate(ERR_OPEN_FILE);
 	height = 0;
-	while (get_next_line(fd, &line))
+	while (1)
 	{
+		res = get_next_line(fd, &line);
+		if (res < 0)
+			terminate(ERR_READ_MAP);
+		if (res == 0 && !*line)
+			break;
 		height++;
-		free(line);
+		safe_free((void**)&line);
 	}
+	safe_free((void**)&line);
 	close(fd);
 	return (height);
-}
-
-int	get_width(char *file_name)
-{
-	int		fd;
-	int		width;
-	char	*line;
-
-	fd = open(file_name, O_RDONLY);
-	get_next_line(fd, &line);
-	width = count_word(line, ' ');
-	free(line);
-	close(fd);
-	return (width);
 }
 
 //void	fill_matrix(int *z_line, int *color_line, char *line)
@@ -78,11 +118,11 @@ void	fill_z_line(int *z_line, char *line)
 	{
 		portion = ft_split(nums[i], ',');
 		z_line[i] = ft_atoi(portion[Z_VALUE]);
-		free(nums[i]);
-		free(portion);
+		safe_free((void**)&nums[i]);
+		safe_free((void**)portion);
 		i++;
 	}
-	free(nums);
+	safe_free((void**)nums);
 }
 
 //int get_warm_color(float ratio)
@@ -117,28 +157,6 @@ void	fill_z_line(int *z_line, char *line)
 //		return (0xe5004f);
 //}
 
-int	default_color(int z, t_map *map)
-{
-	float	percent;
-
-	//ratio = get_ratio_of_abs(z, map->z_min, map->z_max);
-	//if (z < 0)
-	//	return (get_cold_color(ratio));
-	//else if (z > 0)
-	//	return (get_warm_color(ratio));
-	//else
-	//	return (WHITE);
-	percent = get_percent(map->z_min, map->z_max, z);
-	if (percent < 0.25)
-		return (0x392270);
-	else if (percent < 0.5)
-		return (0x5de8e5);
-	else if (percent < 0.75)
-		return (0xf44d9b);
-	else
-		return (0xe9275b);
-}
-
 void	fill_color_line(int *color_line, int *z_line, t_map *map, char *line)
 {
 	char	**nums;
@@ -154,11 +172,11 @@ void	fill_color_line(int *color_line, int *z_line, t_map *map, char *line)
 			color_line[i] = ft_atoi(portion[COLOR_VALUE]);
 		else
 			color_line[i] = default_color(z_line[i], map);
-		free(nums[i]);
-		free(portion);
+		safe_free((void**)&nums[i]);
+		safe_free((void**)portion);
 		i++;
 	}
-	free(nums);
+	safe_free((void**)nums);
 }
 
 void	fill_z_matrix(t_map *map)
@@ -166,15 +184,23 @@ void	fill_z_matrix(t_map *map)
 	int		fd;
 	char	*line;
 	int		i;
+	int res;
 
 	fd = open(map->name, O_RDONLY);
 	i = 0;
-	while(get_next_line(fd, &line))
+	printf("%s\n", map->name);
+	while((res = get_next_line(fd, &line)))
 	{
+		printf("res : %d\n", res);
+		printf("i : %d\n", i);
+		printf("line : %s\n", line);
 		fill_z_line(map->z_matrix[i], line);
 		free(line);
+		line = NULL;
 		i++;
 	}
+	printf("res : %d\n", res);
+	printf("cccc\n");
 	close(fd);
 	map->z_matrix[i] = NULL;
 }
@@ -221,6 +247,7 @@ void	get_z_range(t_map *map)
 void	read_file(t_map *map)
 {
 	fill_z_matrix(map);
+	printf("bbbb\n");
 	get_z_range(map);
 	fill_color_matrix(map);
 }
