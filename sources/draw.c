@@ -173,6 +173,7 @@ void draw(t_fdf *fdf)
 	int x;
 	int y;
 
+	ft_bzero(fdf->addr, SCREEN_WIDTH * SCREEN_HEIGHT * (fdf->bits_per_pixel / 8));
 	y = 0;
 	while (y < fdf->map->height)
 	{

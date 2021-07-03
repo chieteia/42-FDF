@@ -29,6 +29,8 @@ void	copy_to_array(t_map *map, t_list *map_data)
 	int		y;
 	t_data	*tmp;
 
+	map->z_max = INT_MIN;
+	map->z_min = INT_MAX;
 	y = -1;
 	while (++y < map->height)
 	{
@@ -38,6 +40,8 @@ void	copy_to_array(t_map *map, t_list *map_data)
 			tmp = (t_data*)(map_data->content);
 			map->z_matrix[y][x] = tmp->z;
 			map->color_matrix[y][x] = tmp->color;
+			map->z_max = int_max(map->z_max, tmp->z);
+			map->z_min = int_min(map->z_min, tmp->z);
 			map_data = map_data->next;
 		}
 	}
@@ -69,18 +73,17 @@ t_map	*init_map(char *file_name)
 	map->name = file_name;
 	map->width = size[MAP_WIDTH];
 	map->height = size[MAP_HEIGHT];
-	map->z_min = INT_MAX;
-	map->z_max = INT_MIN;
 	list_to_array(map, &map_data);
 	return (map);
 }
 
-t_camera	*init_camera(void)
+t_camera	*init_camera(t_map *map)
 {
 	t_camera	 *camera;
 
 	camera = malloc(sizeof(camera));
-	camera->zoom = 10;
+	camera->zoom = int_min(SCREEN_WIDTH / map->width / 2,
+						SCREEN_HEIGHT / map->height / 2);
 	camera->z_divisor = 1;
 	camera->shift_x = 0;
 	camera->shift_y = 0;
@@ -96,21 +99,21 @@ t_fdf	*init_fdf(char *file_name)
 
 	fdf = malloc(sizeof(t_fdf));
 	fdf->map = init_map(file_name);
-	printf("height : %d width : %d\n", fdf->map->height, fdf->map->width);
-	for (int i = 0; i < fdf->map->height; i++)
-	{
-		for (int j = 0; j < fdf->map->width; j++)
-		{
-			printf("%3d", fdf->map->z_matrix[i][j]);
-		}
-		printf("\n");
-	}
-	exit(0);
+	//printf("height : %d width : %d\n", fdf->map->height, fdf->map->width);
+	//for (int i = 0; i < fdf->map->height; i++)
+	//{
+	//	for (int j = 0; j < fdf->map->width; j++)
+	//	{
+	//		printf("%3d", fdf->map->color_matrix[i][j]);
+	//	}
+	//	printf("\n");
+	//}
+	//exit(0);
 	fdf->mlx = mlx_init();
 	fdf->win = mlx_new_window(fdf->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "FDF");
 	fdf->img = mlx_new_image(fdf->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	fdf->addr = mlx_get_data_addr(fdf->img, &(fdf->bits_per_pixel),
 									&(fdf->line_length), &(fdf->endian));
-	fdf->camera = init_camera();
+	fdf->camera = init_camera(fdf->map);
 	return (fdf);
 }

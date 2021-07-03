@@ -1,7 +1,7 @@
 FDF			=	fdf
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
-DEBUG_FLAGS	=	-Wall -Wextra -Werror -g
+DEBUG_FLAGS	=	-Wall -Wextra -Werror
 
 INC_DIR		=	./
 SRCS_DIR	=	sources/
@@ -20,6 +20,7 @@ RM_DIR		=	rm -rf
 SRCS_FILES	=	main2.c\
 				draw.c\
 				control.c\
+				math_utils.c\
 				init_utils.c\
 				read_map.c\
 				terminate.c\
@@ -30,7 +31,7 @@ OBJ_FILES	=	$(SRCS_FILES:.c=.o)
 SRCS		=	$(addprefix $(SRCS_DIR),$(SRCS_FILES))
 OBJS		=	$(addprefix $(OBJ_DIR), $(OBJ_FILES))
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean re db
 
 all: $(FDF)
 
@@ -70,6 +71,6 @@ fclean:	clean
 
 re:	fclean all
 
-debug: $(LIBFT) $(OBJS) $(LIBMLX)
+db: $(LIBFT) $(OBJS) $(LIBMLX)
 	@$(CC) $(DEBUG_FLAGS) -o $(FDF) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
 	@echo $(YELLOW)"@@@@@ fdf compiling done @@@@@"$(RESET)

@@ -47,9 +47,13 @@ void	bresenham(t_point start, t_point end, t_fdf *data);
 float	get_percent(int start, int end, int current);
 void	draw(t_fdf *data);
 
+// math_utils
+int		int_max(int a, int b);
+int		int_min(int a, int b);
+
 // init_utils
 t_map		*init_map(char *file_name);
-t_camera	*init_camera(void);
+t_camera	*init_camera(t_map *map);
 t_fdf		*init_fdf(char *file_name);
 
 // control

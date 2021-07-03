@@ -42,9 +42,9 @@ int main(int argc, char **argv)
 
 	(void)argc;
 	fdf = init_fdf(argv[1]);
-	printf("*\n");
+	//printf("*\n");
 	read_file(fdf->map);;
-	printf("*\n");
+	//printf("*\n");
 	//mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, (int)x, (int)y, 0xFFFFFF);
 
 	//t_point start;
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	//end.y = 10;
 	//bresenham(start, end, fdf);
 	draw(fdf);
-	printf("*\n");
+	//printf("*\n");
 	//for (int i = 0; i < fdf->height; i++)
 	//{
 	//	for (int j = 0; j < fdf->width; j++)
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 	//	printf("\n");
 	//}
 	//deal_keys(fdf);
-	printf("*\n");
+	//printf("*\n");
 	mlx_hook(fdf->win, 2, 0, deal_key, fdf);
 	mlx_loop(fdf->mlx);
 }
