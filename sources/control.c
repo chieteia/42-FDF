@@ -20,15 +20,15 @@ int	press_key(int key, t_fdf *fdf)
 		fdf->camera->z_divisor+= 0.1;
 	if (key == BUTTON_MORE)
 		fdf->camera->z_divisor -= 0.1;
-	//if (key == 18)
-	//{
-	//	ft_putstr_fd("ok", 2);
-	//	fdf->camera->alpha += 0.05;
-	//}
-	//if (key == 19)
-	//	fdf->camera->beta += 0.05;
-	//if (key == 20)
-	//	fdf->camera->gamma += 0.05;
+	if (key == 18)
+	{
+		ft_putstr_fd("ok", 2);
+		fdf->camera->alpha += 0.05;
+	}
+	if (key == 19)
+		fdf->camera->beta += 0.05;
+	if (key == 20)
+		fdf->camera->gamma += 0.05;
 	if (key == BUTTON_ESC)
 		exit(0);
 	draw(fdf);
