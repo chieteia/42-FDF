@@ -5,10 +5,10 @@ void	malloc_array(t_map *map)
 	int	i;
 
 	i = 0;
-	map->z_matrix = malloc(sizeof(int*) * (map->height + 1));
+	map->z_matrix = malloc(sizeof(int*) * (map->height));
 	if (!map->z_matrix)
 		terminate(ERR_MALLOC);
-	map->color_matrix = malloc(sizeof(int*) * (map->height + 1));
+	map->color_matrix = malloc(sizeof(int*) * (map->height));
 	if (!map->color_matrix)
 		terminate(ERR_MALLOC);
 	while(i < map->height)
@@ -31,11 +31,11 @@ void	copy_to_array(t_map *map, t_list *map_data)
 
 	map->z_max = INT_MIN;
 	map->z_min = INT_MAX;
-	y = -1;
-	while (++y < map->height)
+	y = 0;
+	while (y < map->height)
 	{
-		x = -1;
-		while (++x < map->width)
+		x = 0;
+		while (x < map->width)
 		{
 			tmp = (t_data*)(map_data->content);
 			map->z_matrix[y][x] = tmp->z;
@@ -43,7 +43,9 @@ void	copy_to_array(t_map *map, t_list *map_data)
 			map->z_max = int_max(map->z_max, tmp->z);
 			map->z_min = int_min(map->z_min, tmp->z);
 			map_data = map_data->next;
+			x++;
 		}
+		y++;
 	}
 }
 
@@ -85,11 +87,11 @@ t_camera	*init_camera(t_map *map)
 	camera->zoom = int_min(SCREEN_WIDTH / map->width / 2,
 						SCREEN_HEIGHT / map->height / 2);
 	camera->z_divisor = 1;
-	camera->shift_x = 0;
-	camera->shift_y = 0;
-	camera->alpha = 0;
-	camera->beta = 0;;
-	camera->gamma = 0;
+	camera->shift_x = 480;
+	camera->shift_y = 270;
+	camera->alpha = 0.05;
+	camera->beta = 0.05;;
+	camera->gamma = 0.05;
 	return (camera);
 }
 

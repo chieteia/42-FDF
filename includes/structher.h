@@ -57,9 +57,9 @@ typedef struct s_camera
 	float	z_divisor;
 	int		shift_x;
 	int		shift_y;
-	float	alpha;
-	float	beta;
-	float	gamma;
+	double	alpha;
+	double	beta;
+	double	gamma;
 }				t_camera;
 
 

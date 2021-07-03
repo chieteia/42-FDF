@@ -2,10 +2,12 @@
 # define FDF_H
 
 # include "mlx.h"
+# include "keys.h"
 # include "structher.h"
 # include "libft.h"
 # include "get_next_line.h"
 # include "error_msg.h"
+# include <math.h>
 
 # define MAP_WIDTH 0
 # define MAP_HEIGHT 1
@@ -21,7 +23,8 @@
 # define YELLOW 0xffd700
 # define ORANGE 0xf4a460
 # define RED 0xc71585
-# define WHITE 0x708090
+# define WHITE 0xffffff
+# define BLACK 0x000000
 
 t_admin	*init_master();
 
@@ -57,6 +60,11 @@ t_camera	*init_camera(t_map *map);
 t_fdf		*init_fdf(char *file_name);
 
 // control
-void	deal_keys(t_fdf *fdf);
+int	deal_keys(t_fdf *fdf);
+
+// move utils
+void	rotate_x(int *y, int *z, double alpha);
+void	rotate_y(int *x, int *z, double beta);
+void	rotate_z(int *y, int *x, double gamma);
 
 #endif

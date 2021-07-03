@@ -1,5 +1,4 @@
 #include "fdf.h"
-#include <math.h>
 
 #define MAX(a, b) ((a) > (b) ? (a) : b)
 #define ABS(a) ((a) < 0 ? -(a) : (a)
@@ -7,11 +6,12 @@
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 {
 	int i;
+
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
 	{
 		i = (y * fdf->line_length) + x * (fdf->bits_per_pixel / 8);
 		fdf->addr[i] = color;
-		fdf->addr[++i] = color >>8;
+		fdf->addr[++i] = color >> 8;
 		fdf->addr[++i] = color >> 16;
 	}
 }
@@ -82,30 +82,45 @@ t_point new_point(int x, int y, t_fdf *fdf)
 	return (point);
 }
 
-void bresenham(t_point start, t_point end, t_fdf *fdf)
+void	projection(t_point *point, t_fdf *fdf)
+{
+	point->x *= fdf->camera->zoom;
+	point->y *= fdf->camera->zoom;
+	point->z *= fdf->camera->zoom / fdf->camera->z_divisor;
+	rotate_x(&point->y, &point->z, fdf->camera->alpha);
+	rotate_y(&point->x, &point->z, fdf->camera->beta);
+	rotate_z(&point->y, &point->x, fdf->camera->gamma);
+	isometric(&point->x, &point->y, point->z);
+	point->x += fdf->camera->shift_x;
+	point->y += fdf->camera->shift_y;
+}
+
+void	bresenham(t_point start, t_point end, t_fdf *fdf)
 {
 	//float	x_step;
 	//float	y_step;
 	//float	max;
 	//t_point	current;
 	////zoom
-	start.x *= fdf->camera->zoom;
-	start.y *= fdf->camera->zoom;
-	end.x *= fdf->camera->zoom;
-	end.y *= fdf->camera->zoom;
-	////flatten
-	start.z *= fdf->camera->zoom / fdf->camera->z_divisor;
-	end.z *= fdf->camera->zoom / fdf->camera->z_divisor;
-	//color
-	//fdf->color = (z || z1) ? (0xffa500) : (0xffffff);
-	//3D
-	isometric(&start.x, &start.y, start.z);
-	isometric(&end.x, &end.y, end.z);
-	//Shift
-	start.x += fdf->camera->shift_x;
-	start.y += fdf->camera->shift_y;
-	end.x += fdf->camera->shift_x;
-	end.y += fdf->camera->shift_y;
+	projection(&start, fdf);
+	projection(&end, fdf);
+	//start.x *= fdf->camera->zoom;
+	//start.y *= fdf->camera->zoom;
+	//end.x *= fdf->camera->zoom;
+	//end.y *= fdf->camera->zoom;
+	//////flatten
+	//start.z *= fdf->camera->zoom / fdf->camera->z_divisor;
+	//end.z *= fdf->camera->zoom / fdf->camera->z_divisor;
+	////color
+	////fdf->color = (z || z1) ? (0xffa500) : (0xffffff);
+	////3D
+	//isometric(&start.x, &start.y, start.z);
+	//isometric(&end.x, &end.y, end.z);
+	////Shift
+	//start.x += fdf->camera->shift_x;
+	//start.y += fdf->camera->shift_y;
+	//end.x += fdf->camera->shift_x;
+	//end.y += fdf->camera->shift_y;
 
 	//x_step = start.x - end.x;
 	//y_step = start.y - end.y;
@@ -168,12 +183,46 @@ void bresenham(t_point start, t_point end, t_fdf *fdf)
 //	red =
 //}
 
-void draw(t_fdf *fdf)
+//void	clean_image(t_fdf *fdf)
+//{
+//	ft_bzero(fdf->addr,
+//			SCREEN_WIDTH * SCREEN_HEIGHT * (fdf->bits_per_pixel / 8));
+//}
+
+void	draw_background(t_fdf *fdf)
+{
+	int	i;
+	int	*image_addr;
+
+	image_addr = (int *)(fdf->addr);
+	i = -1;
+	while (++i < SCREEN_HEIGHT * SCREEN_WIDTH)
+		image_addr[i] = 0x101010;
+}
+
+void	draw_translattion(t_fdf *fdf)
 {
 	int x;
 	int y;
 
-	ft_bzero(fdf->addr, SCREEN_WIDTH * SCREEN_HEIGHT * (fdf->bits_per_pixel / 8));
+	x = 25;
+	y = 20;
+	mlx_string_put(fdf->mlx, fdf->win, 60, y += 20, WHITE, "42 FDF");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 40, WHITE, "Zoom : + / -");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Move : Arrow keys");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Sharpen : < / >");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "write something");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "write something");
+}
+
+void	draw(t_fdf *fdf)
+{
+	int x;
+	int y;
+
+	//clean_image(fdf);
+	//printf("alpha : %f beta : %f gamma : %f", fdf->camera->alpha, fdf->camera->beta, fdf->camera->gamma);
+	draw_background(fdf);
 	y = 0;
 	while (y < fdf->map->height)
 	{
@@ -189,4 +238,5 @@ void draw(t_fdf *fdf)
 		y++;
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
+	draw_translattion(fdf);
 }

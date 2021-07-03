@@ -24,6 +24,7 @@ SRCS_FILES	=	main2.c\
 				init_utils.c\
 				read_map.c\
 				terminate.c\
+				move_utils.c\
 				utils.c
 
 OBJ_FILES	=	$(SRCS_FILES:.c=.o)
