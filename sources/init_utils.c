@@ -61,10 +61,10 @@ t_map	*init_map(char *file_name)
 	t_map	*map;
 	t_list	*map_data;
 	int		fd;
-	int		size[2];
+	int		*size;
 
 	map_data = NULL;
-	ft_bzero(size, sizeof(int) * 2);
+	size = (int[]){0, 0};
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		terminate(ERR_OPEN_FILE);

@@ -102,14 +102,8 @@ void	bresenham(t_point start, t_point end, t_fdf *fdf)
 	projection(&start, fdf);
 	projection(&end, fdf);
 	delta = (t_point){abs(end.x - start.x), abs(end.y - start.y), 0, 0};
-	//delta.x = abs(end.x - start.x);
-	//delta.y = abs(end.y - start.y);
 	step = (t_point){2 * (start.x < end.x) - 1, 2 * (start.y < end.y) - 1, 0, 0};
-	//step.x = 2 * (start.x < end.x) - 1;
-	//step.y = 2 * (start.y < end.y) - 1;
 	cur = (t_point){start.x, start.y, 0, 0};
-	//cur.x = start.x;
-	//cur.y = start.y;
 	err[0] = delta.x - delta.y;
 	while (cur.x != end.x || cur.y != end.y)
 	{
@@ -134,9 +128,12 @@ void	draw_background(t_fdf *fdf)
 	int	*image_addr;
 
 	image_addr = (int *)(fdf->addr);
-	i = -1;
-	while (++i < SCREEN_HEIGHT * SCREEN_WIDTH)
+	i = 0;
+	while (i < SCREEN_HEIGHT * SCREEN_WIDTH)
+	{
 		image_addr[i] = 0x101010;
+		i++;
+	}
 }
 
 void	draw_translattion(t_fdf *fdf)
