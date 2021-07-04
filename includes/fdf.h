@@ -6,7 +6,7 @@
 # include "structher.h"
 # include "libft.h"
 # include "get_next_line.h"
-# include "error_msg.h"
+# include "error_message.h"
 # include <math.h>
 
 # define MAP_WIDTH 0
@@ -25,8 +25,6 @@
 # define RED 0xc71585
 # define WHITE 0xffffff
 # define BLACK 0x000000
-
-t_admin	*init_master();
 
 void	terminate(char *s);
 

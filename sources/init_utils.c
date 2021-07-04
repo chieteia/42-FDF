@@ -58,12 +58,13 @@ void	list_to_array(t_map *map, t_list **map_data)
 
 t_map	*init_map(char *file_name)
 {
-	t_map		*map;
-	t_list		*map_data;
-	int			fd;
-	static int	size[2];
+	t_map	*map;
+	t_list	*map_data;
+	int		fd;
+	int		size[2];
 
 	map_data = NULL;
+	ft_bzero(size, sizeof(int) * 2);
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		terminate(ERR_OPEN_FILE);
@@ -83,15 +84,17 @@ t_camera	*init_camera(t_map *map)
 {
 	t_camera	 *camera;
 
-	camera = malloc(sizeof(camera));
+	camera = malloc(sizeof(t_camera));
+	if (!camera)
+		terminate(ERR_MALLOC);
 	camera->zoom = int_min(SCREEN_WIDTH / map->width / 2,
 						SCREEN_HEIGHT / map->height / 2);
 	camera->z_divisor = 1;
 	camera->shift_x = 480;
 	camera->shift_y = 270;
-	camera->alpha = 0.05;
-	camera->beta = 0.05;;
-	camera->gamma = 0.05;
+	camera->alpha = 0;
+	camera->beta = 0;
+	camera->gamma = 0;
 	return (camera);
 }
 
@@ -100,20 +103,18 @@ t_fdf	*init_fdf(char *file_name)
 	t_fdf	*fdf;
 
 	fdf = malloc(sizeof(t_fdf));
+	if (!fdf)
+		terminate(ERR_MALLOC);
 	fdf->map = init_map(file_name);
-	//printf("height : %d width : %d\n", fdf->map->height, fdf->map->width);
-	//for (int i = 0; i < fdf->map->height; i++)
-	//{
-	//	for (int j = 0; j < fdf->map->width; j++)
-	//	{
-	//		printf("%3d", fdf->map->color_matrix[i][j]);
-	//	}
-	//	printf("\n");
-	//}
-	//exit(0);
 	fdf->mlx = mlx_init();
+	if (!fdf->mlx)
+		terminate(ERR_MLX_INIT);
 	fdf->win = mlx_new_window(fdf->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "FDF");
+	if (!fdf->win)
+		terminate(ERR_NEW_WIN);
 	fdf->img = mlx_new_image(fdf->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	if (!fdf->img)
+		terminate(ERR_NEW_IMG);
 	fdf->addr = mlx_get_data_addr(fdf->img, &(fdf->bits_per_pixel),
 									&(fdf->line_length), &(fdf->endian));
 	fdf->camera = init_camera(fdf->map);

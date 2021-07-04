@@ -1,11 +1,8 @@
 #include "fdf.h"
 
-#define MAX(a, b) ((a) > (b) ? (a) : b)
-#define ABS(a) ((a) < 0 ? -(a) : (a)
-
 void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 {
-	int i;
+	int	i;
 
 	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
 	{
@@ -16,10 +13,10 @@ void	my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color)
 	}
 }
 
-float get_percent(int start, int end, int current)
+float	get_percent(int start, int end, int current)
 {
-	float position;
-	float distance;
+	float	position;
+	float	distance;
 
 	position = current - start;
 	distance = end - start;
@@ -29,38 +26,38 @@ float get_percent(int start, int end, int current)
 		return (position / distance);
 }
 
-int get_rgb(int start, int end, float percent)
+int	get_rgb(int start, int end, float percent)
 {
-	return ((int)(end - start) * percent + start);
+	return ((end - start) * percent + start);
 }
 
-int get_color(t_point current, t_point start, t_point end, t_point delta)
+int	get_color(t_point current, t_point start, t_point end, t_point delta)
 {
-	int red;
-	int green;
-	int blue;
-	float percentage;
+	int		red;
+	int		green;
+	int		blue;
+	float	percentage;
 
 	if (delta.x > delta.y)
 		percentage = get_percent(start.x, end.x, current.x);
 	else
 		percentage = get_percent(start.y, end.y, current.y);
-	red = get_rgb((start.color >> 16) & 0xFF,
-				(end.color >> 16) & 0xFF,
+	red = get_rgb((start.color >> 16) & 0xFF, \
+				(end.color >> 16) & 0xFF, \
 				percentage);
-	green = get_rgb((start.color >> 8) & 0xFF,
-					(end.color >> 8) & 0xFF,
+	green = get_rgb((start.color >> 8) & 0xFF, \
+					(end.color >> 8) & 0xFF, \
 					percentage);
-	blue = get_rgb(start.color & 0xFF,
-				end.color & 0xFF,
+	blue = get_rgb(start.color & 0xFF, \
+				end.color & 0xFF, \
 				percentage);
 	return ((red << 16) | (green << 8) | blue);
 }
 
-void isometric(int *x, int *y, int z)
+void	isometric(int *x, int *y, int z)
 {
-	int previous_x;
-	int previous_y;
+	int	previous_x;
+	int	previous_y;
 
 	previous_x = *x;
 	previous_y = *y;
@@ -68,9 +65,9 @@ void isometric(int *x, int *y, int z)
 	*y = (previous_x + previous_y) * sin(0.523599) - z;
 }
 
-t_point new_point(int x, int y, t_fdf *fdf)
+t_point	new_point(int x, int y, t_fdf *fdf)
 {
-	t_point point;
+	t_point	point;
 
 	point.x = x;
 	point.y = y;
@@ -97,97 +94,39 @@ void	projection(t_point *point, t_fdf *fdf)
 
 void	bresenham(t_point start, t_point end, t_fdf *fdf)
 {
-	//float	x_step;
-	//float	y_step;
-	//float	max;
-	//t_point	current;
-	////zoom
+	t_point	delta;
+	t_point	step;
+	t_point	cur;
+	int		err[2];
+
 	projection(&start, fdf);
 	projection(&end, fdf);
-	//start.x *= fdf->camera->zoom;
-	//start.y *= fdf->camera->zoom;
-	//end.x *= fdf->camera->zoom;
-	//end.y *= fdf->camera->zoom;
-	//////flatten
-	//start.z *= fdf->camera->zoom / fdf->camera->z_divisor;
-	//end.z *= fdf->camera->zoom / fdf->camera->z_divisor;
-	////color
-	////fdf->color = (z || z1) ? (0xffa500) : (0xffffff);
-	////3D
-	//isometric(&start.x, &start.y, start.z);
-	//isometric(&end.x, &end.y, end.z);
-	////Shift
-	//start.x += fdf->camera->shift_x;
-	//start.y += fdf->camera->shift_y;
-	//end.x += fdf->camera->shift_x;
-	//end.y += fdf->camera->shift_y;
-
-	//x_step = start.x - end.x;
-	//y_step = start.y - end.y;
-
-	//max = MAX(ABS(x_step), ABS(y_step));
-	//x_step /= max;
-	//y_step /= max;
-	//current.x = start.x;
-	//current.y = start.y;
-	//while((int)(current.x - end.x) || (int)(current.y - end.y))
-	//{
-	//	mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, current.x, current.y, 0xffffff);
-	//	current.x += x_step;
-	//	current.y += y_step;
-	//}
-	t_point delta;
-	t_point step;
-	t_point current;
-	int err[2];
-
-	delta.x = abs(end.x - start.x);
-	step.x = 2 * (start.x < end.x) - 1;
-	delta.y = abs(end.y - start.y);
-	step.y = 2 * (start.y < end.y) - 1;
-	current.x = start.x;
-	current.y = start.y;
+	delta = (t_point){abs(end.x - start.x), abs(end.y - start.y), 0, 0};
+	//delta.x = abs(end.x - start.x);
+	//delta.y = abs(end.y - start.y);
+	step = (t_point){2 * (start.x < end.x) - 1, 2 * (start.y < end.y) - 1, 0, 0};
+	//step.x = 2 * (start.x < end.x) - 1;
+	//step.y = 2 * (start.y < end.y) - 1;
+	cur = (t_point){start.x, start.y, 0, 0};
+	//cur.x = start.x;
+	//cur.y = start.y;
 	err[0] = delta.x - delta.y;
-	while (1)
+	while (cur.x != end.x || cur.y != end.y)
 	{
-		//ft_putchar_fd('(', 2);
-		//ft_putnbr_fd(current.x, 2);
-		//ft_putchar_fd(' ', 2);
-		//ft_putnbr_fd(current.y, 2);
-		//ft_putchar_fd(')', 2);
-		//ft_putchar_fd('\n', 2);
-		//mlx_pixel_put(fdf->mlx, fdf->win, current.x, current.y, get_color(current, start, end, delta));
-		my_mlx_pixel_put(fdf, current.x, current.y, get_color(current, start, end, delta));
-		if (current.x == end.x && current.y == end.y)
-			break;
+		my_mlx_pixel_put(fdf, cur.x, cur.y, get_color(cur, start, end, delta));
 		err[1] = 2 * err[0];
 		if (err[1] > -delta.y)
 		{
 			err[0] -= delta.y;
-			current.x += step.x;
+			cur.x += step.x;
 		}
 		if (err[1] < delta.x)
 		{
 			err[0] += delta.x;
-			current.y += step.y;
+			cur.y += step.y;
 		}
 	}
 }
-
-//int	gradient(int x, int y, int x_dist, int y_dist, t_fdf *fdf)
-//{
-//	int	red;
-//	int	green;
-//	int	blue;
-
-//	red =
-//}
-
-//void	clean_image(t_fdf *fdf)
-//{
-//	ft_bzero(fdf->addr,
-//			SCREEN_WIDTH * SCREEN_HEIGHT * (fdf->bits_per_pixel / 8));
-//}
 
 void	draw_background(t_fdf *fdf)
 {
@@ -202,26 +141,25 @@ void	draw_background(t_fdf *fdf)
 
 void	draw_translattion(t_fdf *fdf)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	x = 25;
 	y = 20;
 	mlx_string_put(fdf->mlx, fdf->win, 60, y += 20, WHITE, "42 FDF");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 40, WHITE, "Zoom : + / -");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 40, WHITE, "Zoom : + or -");
 	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Move : Arrow keys");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Sharpen : < / >");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "write something");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "write something");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Sharpen : < or >");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Rotate_X : 1 or 7");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Rotate_Y : 2 or 8");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Rotate_Z : 3 or 9");
 }
 
 void	draw(t_fdf *fdf)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
-	//clean_image(fdf);
-	//printf("alpha : %f beta : %f gamma : %f", fdf->camera->alpha, fdf->camera->beta, fdf->camera->gamma);
 	draw_background(fdf);
 	y = 0;
 	while (y < fdf->map->height)
