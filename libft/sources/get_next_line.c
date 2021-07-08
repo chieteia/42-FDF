@@ -63,7 +63,7 @@ int	get_next_line(int fd, char **line)
 		return (-1);
 	if (!ft_malloc((void **)&buff, sizeof(char), BUFFER_SIZE + 1))
 		return (-1);
-	while ((read_len > 0) && !ft_strchr(stock, '\n'))
+	while (!ft_strchr(stock, '\n') && (read_len > 0))
 	{
 		if (make_buff(fd, &read_len, &buff, &stock) == FAILED)
 			return (-1);

@@ -3,46 +3,31 @@
 
 # include "mlx.h"
 # include "keys.h"
+# include "color.h"
 # include "structher.h"
 # include "libft.h"
 # include "get_next_line.h"
 # include "error_message.h"
 # include <math.h>
 
+# define SCREEN_WIDTH 1920
+# define SCREEN_HEIGHT 1080
+
 # define MAP_WIDTH 0
 # define MAP_HEIGHT 1
 
-# define SCREEN_WIDTH 1920
-# define SCREEN_HEIGHT 1080
 # define Z_VALUE 0
 # define COLOR_VALUE 1
-
-# define PURPLE 0xba55d3
-# define BLUE 0x4169e1
-# define GREEN 0x7fffd4
-# define YELLOW 0xffd700
-# define ORANGE 0xf4a460
-# define RED 0xc71585
-# define WHITE 0xffffff
-# define BLACK 0x000000
-
-void	terminate(char *s);
 
 void	read_map(const int fd, int *size, t_list **map_data);
 
 void	free_str_array(char ***array);
-char	**parsed_by_char(char *line, char c);
+//char	**parsed_by_char(char *line, char c);
 int		count_word(const char *s, char c);
 int		default_color(int z, t_map *map);
+void	terminate(char *s);
 
 t_data	*new_data(char *str);
-void	read_file(t_map *map);
-void	check_map_form(t_map *map);
-void	fill_matrix(int *z_line, int *color_matrix, char *line);
-int		get_width(char *file_name);
-int 	get_height(char *file_name);
-float	get_ratio_of_abs(int num, int min, int max);
-int		default_color(int z, t_map *map);
 
 void	bresenham(t_point start, t_point end, t_fdf *data);
 float	get_percent(int start, int end, int current);
@@ -58,7 +43,7 @@ t_camera	*init_camera(t_map *map);
 t_fdf		*init_fdf(char *file_name);
 
 // control
-int	deal_keys(t_fdf *fdf);
+int		deal_keys(t_fdf *fdf);
 
 // move utils
 void	rotate_x(int *y, int *z, double alpha);

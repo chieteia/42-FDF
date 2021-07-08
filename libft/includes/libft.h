@@ -21,6 +21,13 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
+typedef struct s_wlist
+{
+	struct s_wlist	*prev;
+	void			*content;
+	struct s_wlist	*next;
+}				t_wlist;
+
 void			*ft_memset(void *buf, int ch, size_t n);
 void			ft_bzero(void *s, size_t n);
 void			*ft_memcpy(void *dest, const void *src, size_t n);

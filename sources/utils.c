@@ -13,15 +13,15 @@ void	free_str_array(char ***array)
 	*array = NULL;
 }
 
-char	**parsed_by_char(char *line, char c)
-{
-	char	**parsed_line;
+//char	**parsed_by_char(char *line, char c)
+//{
+//	char	**parsed_line;
 
-	parsed_line = ft_split(line, c);
-	if (!parsed_line)
-		terminate(ERR_MALLOC);
-	return (parsed_line);
-}
+//	parsed_line = ft_split(line, c);
+//	if (!parsed_line)
+//		terminate(ERR_MALLOC);
+//	return (parsed_line);
+//}
 
 int	count_word(const char *s, char c)
 {
@@ -44,20 +44,29 @@ int	default_color(int z, t_map *map)
 {
 	float	percent;
 
-	//ratio = get_ratio_of_abs(z, map->z_min, map->z_max);
-	//if (z < 0)
-	//	return (get_cold_color(ratio));
-	//else if (z > 0)
-	//	return (get_warm_color(ratio));
-	//else
-	//	return (WHITE);
 	percent = get_percent(map->z_min, map->z_max, z);
-	if (percent < 0.25)
-		return (0x392270);
+	if (percent < 0.15)
+		return (PURPLE);
+	else if (percent < 0.25)
+		return (RIGHT_PURPLE);
+	else if (percent < 0.35)
+		return (BLUE);
 	else if (percent < 0.5)
-		return (0x5de8e5);
+		return (RIGHT_BLUE);
+	else if (percent < 0.7)
+		return (GREEN);
 	else if (percent < 0.75)
-		return (0xf44d9b);
+		return (YELLOW);
+	else if (percent < 0.8)
+		return (ORANGE);
+	else if (percent < 0.9)
+		return (PINK);
 	else
-		return (0xe9275b);
+		return (RIGHT_RED);
+}
+
+void	terminate(char *s)
+{
+	ft_putstr_fd(s, 2);
+	exit(0);
 }

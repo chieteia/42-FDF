@@ -31,11 +31,11 @@ void	copy_to_array(t_map *map, t_list *map_data)
 
 	map->z_max = INT_MIN;
 	map->z_min = INT_MAX;
-	y = 0;
-	while (y < map->height)
+	y = map->height;
+	while (0 <= --y)
 	{
-		x = 0;
-		while (x < map->width)
+		x = map->width;
+		while (0 <= --x)
 		{
 			tmp = (t_data*)(map_data->content);
 			map->z_matrix[y][x] = tmp->z;
@@ -43,9 +43,7 @@ void	copy_to_array(t_map *map, t_list *map_data)
 			map->z_max = int_max(map->z_max, tmp->z);
 			map->z_min = int_min(map->z_min, tmp->z);
 			map_data = map_data->next;
-			x++;
 		}
-		y++;
 	}
 }
 

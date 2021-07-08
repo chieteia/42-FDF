@@ -1,4 +1,5 @@
 #include "fdf.h"
+#include <time.h>
 
 void	check_map_value(char **parsed_str)
 {
@@ -14,8 +15,6 @@ t_data	*get_map_data(char **parsed_str)
 	new = malloc(sizeof(t_data));
 	if (!new)
 		terminate(ERR_MALLOC);
-	//if(!ft_malloc((void **)&new, sizeof(t_data), 1))
-	//	terminate(ERR_MALLOC);
 	new->z = ft_atoi(parsed_str[0]);
 	if (parsed_str[1])
 		new->color = ft_atoi_base(parsed_str[1], 16);
@@ -29,12 +28,9 @@ t_data	*new_data(char *str)
 	t_data	*new;
 	char	**parsed_str;
 
-	//ft_putstr_fd("a", 2);
-	//ft_putstr_fd(str, 2);
-	//ft_putstr_fd(" ", 2);
-	parsed_str = parsed_by_char(str, ',');
-	//ft_putstr_fd("b", 2);
-	//ft_putstr_fd(str, 2);
+	parsed_str = ft_split(str, ',');
+	if (!parsed_str)
+		terminate(ERR_MALLOC);
 	check_map_value(parsed_str);
 	new = get_map_data(parsed_str);
 	free_str_array(&parsed_str);
@@ -64,17 +60,27 @@ void	get_map_data_by_line(char **parsed_line,
 	t_list	*new;
 
 	index = -1;
-	new = NULL;
 	check_current_map_width(parsed_line, size);
 	while (parsed_line[++index])
 	{
 		new = ft_lstnew(new_data(parsed_line[index]));
 		if (!new)
 			terminate(ERR_MALLOC);
-		ft_lstadd_back(map_data, new);
+		//lst_lastでlistの長さ分だけwhileが回るから処理が重くなる
+		new->next = (*map_data);
+		(*map_data) = new;
 	}
-	//ft_putstr_fd("\n", 2);
 }
+
+//int		check_end_conditions(int res, char *line)
+//{
+//	if (res < 0)
+//		terminate(ERR_READ_MAP);
+//	if (res == 0 && !*line)
+//		return (0);
+//	else
+//		return (1);
+//}
 
 void	 read_map(const int fd, int *size, t_list **map_data)
 {
@@ -90,20 +96,12 @@ void	 read_map(const int fd, int *size, t_list **map_data)
 			terminate(ERR_READ_MAP);
 		if (res == 0 && !*line)
 			break;
-		//ft_putstr_fd(line, 2);
-		//ft_putchar_fd('\n', 2);
-		//int index = 0;
-		parsed_line = parsed_by_char(line, ' ');
-		//while (parsed_line[index])
-		//{
-		//	ft_putstr_fd(parsed_line[index], 2);
-		//	ft_putchar_fd(',', 2);
-		//	index++;
-		//}
-		//ft_putchar_fd('\n', 2);
+		parsed_line = ft_split(line, ' ');
+		if (!parsed_line)
+			terminate(ERR_MALLOC);
+		safe_free((void**)&line);
 		get_map_data_by_line(parsed_line, size, map_data);
 		free_str_array(&parsed_line);
-		safe_free((void**)&line);
 		size[MAP_HEIGHT]++;
 	}
 	if (!(*map_data))

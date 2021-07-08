@@ -2,8 +2,6 @@
 
 int	press_key(int key, t_fdf *fdf)
 {
-	//printf("%d", key);
-
 	if (key == ARROW_UP)
 		fdf->camera->shift_y -= 50;
 	if (key == ARROW_DOWN)
@@ -20,12 +18,18 @@ int	press_key(int key, t_fdf *fdf)
 		fdf->camera->z_divisor+= 0.1;
 	if (key == BUTTON_MORE)
 		fdf->camera->z_divisor -= 0.1;
-	if (key == 18)
+	if (key == BUTTON_1)
 		fdf->camera->alpha += 0.05;
-	if (key == 19)
+	if (key == BUTTON_7)
+		fdf->camera->alpha -= 0.05;
+	if (key == BUTTON_2)
 		fdf->camera->beta += 0.05;
-	if (key == 20)
+	if (key == BUTTON_8)
+		fdf->camera->beta -= 0.05;
+	if (key == BUTTON_3)
 		fdf->camera->gamma += 0.05;
+	if (key == BUTTON_9)
+		fdf->camera->gamma -= 0.05;
 	if (key == BUTTON_ESC)
 		exit(0);
 	draw(fdf);

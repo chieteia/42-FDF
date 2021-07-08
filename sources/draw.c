@@ -79,17 +79,18 @@ t_point	new_point(int x, int y, t_fdf *fdf)
 	return (point);
 }
 
-void	projection(t_point *point, t_fdf *fdf)
+t_point	projection(t_point point, t_fdf *fdf)
 {
-	point->x *= fdf->camera->zoom;
-	point->y *= fdf->camera->zoom;
-	point->z *= fdf->camera->zoom / fdf->camera->z_divisor;
-	rotate_x(&point->y, &point->z, fdf->camera->alpha);
-	rotate_y(&point->x, &point->z, fdf->camera->beta);
-	rotate_z(&point->y, &point->x, fdf->camera->gamma);
-	isometric(&point->x, &point->y, point->z);
-	point->x += fdf->camera->shift_x;
-	point->y += fdf->camera->shift_y;
+	point.x *= fdf->camera->zoom;
+	point.y *= fdf->camera->zoom;
+	point.z *= fdf->camera->zoom / fdf->camera->z_divisor;
+	rotate_x(&point.y, &point.z, fdf->camera->alpha);
+	rotate_y(&point.x, &point.z, fdf->camera->beta);
+	rotate_z(&point.y, &point.x, fdf->camera->gamma);
+	isometric(&point.x, &point.y, point.z);
+	point.x += fdf->camera->shift_x;
+	point.y += fdf->camera->shift_y;
+	return (point);
 }
 
 void	bresenham(t_point start, t_point end, t_fdf *fdf)
@@ -99,8 +100,6 @@ void	bresenham(t_point start, t_point end, t_fdf *fdf)
 	t_point	cur;
 	int		err[2];
 
-	projection(&start, fdf);
-	projection(&end, fdf);
 	delta = (t_point){abs(end.x - start.x), abs(end.y - start.y), 0, 0};
 	step = (t_point){2 * (start.x < end.x) - 1, 2 * (start.y < end.y) - 1, 0, 0};
 	cur = (t_point){start.x, start.y, 0, 0};
@@ -131,7 +130,7 @@ void	draw_background(t_fdf *fdf)
 	i = 0;
 	while (i < SCREEN_HEIGHT * SCREEN_WIDTH)
 	{
-		image_addr[i] = 0x101010;
+		image_addr[i] = BLACK;
 		i++;
 	}
 }
@@ -143,13 +142,13 @@ void	draw_translattion(t_fdf *fdf)
 
 	x = 25;
 	y = 20;
-	mlx_string_put(fdf->mlx, fdf->win, 60, y += 20, WHITE, "42 FDF");
+	mlx_string_put(fdf->mlx, fdf->win, 60, y += 20, ORANGE, "42 FDF");
 	mlx_string_put(fdf->mlx, fdf->win, x, y += 40, WHITE, "Zoom : + or -");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Move : Arrow keys");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Move : Arrows");
 	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Sharpen : < or >");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Rotate_X : 1 or 7");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Rotate_Y : 2 or 8");
-	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, WHITE, "Rotate_Z : 3 or 9");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, BLUE, "Rotate_X : 1 or 7");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, RED, "Rotate_Y : 2 or 8");
+	mlx_string_put(fdf->mlx, fdf->win, x, y += 30, GREEN, "Rotate_Z : 3 or 9");
 }
 
 void	draw(t_fdf *fdf)
@@ -165,9 +164,11 @@ void	draw(t_fdf *fdf)
 		while (x < fdf->map->width)
 		{
 			if (x < fdf->map->width - 1)
-				bresenham(new_point(x, y, fdf), new_point(x + 1, y, fdf), fdf);
+				bresenham(projection(new_point(x, y, fdf), fdf), \
+							projection(new_point(x + 1, y, fdf), fdf), fdf);
 			if (y < fdf->map->height - 1)
-				bresenham(new_point(x, y, fdf), new_point(x, y + 1, fdf), fdf);
+				bresenham(projection(new_point(x, y, fdf), fdf), \
+							projection(new_point(x, y + 1, fdf), fdf), fdf);
 			x++;
 		}
 		y++;

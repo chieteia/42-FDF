@@ -11,6 +11,11 @@
 # define BUTTON_LESS 43
 # define BUTTON_MORE 47
 # define BUTTON_ESC 53
-
+# define BUTTON_1 18
+# define BUTTON_2 19
+# define BUTTON_3 20
+# define BUTTON_7 26
+# define BUTTON_8 28
+# define BUTTON_9 25
 
 #endif
