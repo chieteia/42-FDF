@@ -1,7 +1,6 @@
 FDF			=	fdf
 CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror
-DEBUG_FLAGS	=	-Wall -Wextra -Werror -O3
+CFLAGS		=	-Wall -Wextra -Werror -03
 
 INC_DIR		=	./
 SRCS_DIR	=	sources/
@@ -17,14 +16,21 @@ LXFLAGS		=	-framework OpenGL -framework AppKit
 RM			=	rm -f
 RM_DIR		=	rm -rf
 
-SRCS_FILES	=	main.c\
-				draw.c\
-				control.c\
-				math_utils.c\
-				init_utils.c\
-				read_map.c\
-				move_utils.c\
-				utils.c
+SRCS_FILES	=	check_utils.c \
+				color_utils.c \
+				control_utils.c \
+				control.c \
+				draw_utils.c \
+				draw.c \
+				init_utils.c \
+				init.c \
+				main.c \
+				math_utils.c \
+				move_utils.c \
+				new_data.c \
+				projection.c \
+				random_utils.c \
+				read_map.c
 
 OBJ_FILES	=	$(SRCS_FILES:.c=.o)
 
@@ -40,8 +46,8 @@ GREEN		=	"\033[32m"
 YELLOW		=	"\033[33m"
 RESET		=	"\033[0m"
 
-$(FDF): $(LIBFT) $(OBJS)
-	@$(CC) -o $(FDF) $(OBJS) -L$(LIB_DIR) -lft
+$(FDF): $(LIBFT) $(OBJS) $(LIBMLX)
+	@$(CC) -o $(FDF) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
 	@echo $(YELLOW)"@@@@@ fdf compiling done @@@@@"$(RESET)
 
 $(LIBFT):
@@ -52,10 +58,10 @@ $(LIBMLX):
 	@echo $(YELLOW)"@@@@@ libmlx.a created @@@@@"$(RESET)
 
 ## オブジェクトファイルの主力先を変えている
-$(OBJ_DIR)%.o: $(SRCS_DIR)%.c includes/fdf.h
+$(OBJ_DIR)%.o: $(SRCS_DIR)%.c
 	@echo $(GREEN)"Creating: $@"$(RESET)
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(DEBUG_FLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(INCLUDES) -c $< -o $@
 
 clean:
 	@$(RM_DIR) $(OBJ_DIR)
@@ -70,7 +76,3 @@ fclean:	clean
 	@echo $(RED)"REMOVE $(FDF)"$(RESET)
 
 re:	fclean all
-
-db: $(LIBFT) $(OBJS) $(LIBMLX)
-	@$(CC) $(DEBUG_FLAGS) -o $(FDF) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
-	@echo $(YELLOW)"@@@@@ fdf compiling done @@@@@"$(RESET)

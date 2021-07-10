@@ -9,6 +9,12 @@ typedef struct s_point
 	int	color;
 }				t_point;
 
+typedef struct s_set
+{
+	int	x;
+	int	y;
+}				t_set;
+
 typedef struct s_data
 {
 	int				z;
@@ -34,17 +40,18 @@ typedef struct s_camera
 	double	alpha;
 	double	beta;
 	double	gamma;
+	int		projection;
 }				t_camera;
 
 typedef struct s_fdf
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
 
 	t_camera	*camera;
 	t_map		*map;

@@ -1,6 +1,9 @@
 #ifndef KEYS_H
 # define KEYS_H
 
+# define MOUSE_SCROLL_UP 4
+# define MOUSE_SCROLL_DOWN 5
+
 # define ARROW_LEFT		123
 # define ARROW_RIGHT	124
 # define ARROW_DOWN		125
@@ -17,5 +20,7 @@
 # define BUTTON_7 26
 # define BUTTON_8 28
 # define BUTTON_9 25
+# define BUTTON_I 34
+# define BUTTON_P 35
 
 #endif

@@ -7,16 +7,16 @@ char	*ft_strchr(const char *s, int c)
 
 	i = 0;
 	res = NULL;
-	while (i < (int)ft_strlen(s) + 1)
+	if (!s)
+		return (NULL);
+	while (*s)
 	{
-		if (!s)
-			return (NULL);
-		if (s[i] == c)
+		if (*s == c)
 		{
-			res = (char *)&s[i];
+			res = (char *)&(*s);
 			break ;
 		}
-		i++;
+		s++;
 	}
 	return (res);
 }

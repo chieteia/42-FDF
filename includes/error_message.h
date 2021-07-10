@@ -1,5 +1,5 @@
-#ifndef ERROR_MSG_H
-# define ERROR_MSG_H
+#ifndef ERROR_MESSAGE_H
+# define ERROR_MESSAGE_H
 
 # define ERR_OPEN_FILE		"Failed to open file.\nExit.\n"
 

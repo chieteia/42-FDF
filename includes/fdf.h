@@ -10,8 +10,8 @@
 # include "error_message.h"
 # include <math.h>
 
-# define SCREEN_WIDTH 1920
-# define SCREEN_HEIGHT 1080
+# define SCREEN_WIDTH 1500
+# define SCREEN_HEIGHT 1000
 
 # define MAP_WIDTH 0
 # define MAP_HEIGHT 1
@@ -19,35 +19,66 @@
 # define Z_VALUE 0
 # define COLOR_VALUE 1
 
-void	read_map(const int fd, int *size, t_list **map_data);
+# define ISO 0
+# define PARALLEL 1
 
-void	free_str_array(char ***array);
-//char	**parsed_by_char(char *line, char c);
-int		count_word(const char *s, char c);
-int		default_color(int z, t_map *map);
-void	terminate(char *s);
+//  check_utils
+void		check_current_map_width(int current_width, int *size);
+int			check_end_conditions(int res, char *line);
 
-t_data	*new_data(char *str);
+// color_utils
+int			get_rgb(int start, int end, float percent);
+int			get_color(t_set cur, t_point start, t_point end, t_set delta);
+int			default_color(int z, t_map *map);
 
-void	bresenham(t_point start, t_point end, t_fdf *data);
-float	get_percent(int start, int end, int current);
-void	draw(t_fdf *data);
-
-// math_utils
-int		int_max(int a, int b);
-int		int_min(int a, int b);
-
-// init_utils
-t_map		*init_map(char *file_name);
-t_camera	*init_camera(t_map *map);
-t_fdf		*init_fdf(char *file_name);
+// control_utils
+void		zoom(int key, t_fdf *fdf);
+void		shift(int key, t_fdf *fdf);
+void		sharpen(int key, t_fdf *fdf);
+void		rotate(int key, t_fdf *fdf);
+void		setup_projection(int key, t_fdf *fdf);
 
 // control
-int		deal_keys(t_fdf *fdf);
+int			deal_keys(t_fdf *fdf);
+
+// draw_utils
+void		my_mlx_pixel_put(t_fdf *fdf, int x, int y, int color);
+void		draw_background(t_fdf *fdf);
+void		setup_drawing(t_fdf *fdf);
+void		draw_translation(t_fdf *fdf);
+
+// draw
+void		bresenham(t_point start, t_point end, t_fdf *data);
+void		draw(t_fdf *data);
+
+// init
+t_fdf		*init_fdf(char *file_name);
+
+// init_utils
+void		list_to_array(t_map *map, t_list **map_data);
+
+// math_utils
+int			int_max(int a, int b);
+int			int_min(int a, int b);
+float		get_percent(int start, int end, int current);
 
 // move utils
-void	rotate_x(int *y, int *z, double alpha);
-void	rotate_y(int *x, int *z, double beta);
-void	rotate_z(int *y, int *x, double gamma);
+void		rotate_x(int *y, int *z, double alpha);
+void		rotate_y(int *x, int *z, double beta);
+void		rotate_z(int *y, int *x, double gamma);
+
+// new_data
+t_data		*new_data(char *str);
+
+// projection
+t_point		new_point(int x, int y, t_fdf *fdf);
+t_point		projection(t_point point, t_fdf *fdf);
+
+// random_utils
+void		free_str_array(char ***array);
+void		terminate(char *s);
+
+// read_map
+void		read_map(const int fd, int *size, t_list **map_data);
 
 #endif
