@@ -58,5 +58,8 @@ void	setup_projection(int key, t_fdf *fdf)
 		fdf->camera->projection = ISO;
 	else if (key == BUTTON_P)
 		fdf->camera->projection = PARALLEL;
+	fdf->camera->alpha = 0;
+	fdf->camera->beta = 0;
+	fdf->camera->gamma = 0;
 	draw(fdf);
 }

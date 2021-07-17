@@ -6,13 +6,19 @@ INC_DIR		=	./
 SRCS_DIR	=	sources/
 OBJ_DIR		=	objects/
 LIB_DIR		=	libft/
-MLX_DIR		=	minilibx_macos/
 
 HEADERS		=	$(INC_DIR)includes/ $(LIB_DIR)includes/ $(MLX_DIR)
 LIBFT		=	$(LIB_DIR)libft.a
-LIBMLX		=	$(MLX_DIR)libmlx.a
 INCLUDES	=	$(addprefix -I, $(HEADERS))
-LXFLAGS		=	-framework OpenGL -framework AppKit
+ifeq ($(shell uname), Darwin)
+	MLX_DIR		=	minilibx_macos/
+	LIBMLX		=	$(MLX_DIR)libmlx.a
+	LXFLAGS		=	-framework OpenGL -framework AppKit
+else
+	MLX_DIR		=	minilibx-linux/
+	LIBMLX		=	$(MLX_DIR)libmlx_Linux.a
+	LXFLAGS		=	-lXext -lX11 -lm
+endif
 RM			=	rm -f
 RM_DIR		=	rm -rf
 
@@ -47,7 +53,7 @@ YELLOW		=	"\033[33m"
 RESET		=	"\033[0m"
 
 $(FDF): $(LIBFT) $(OBJS) $(LIBMLX)
-	@$(CC) -o $(FDF) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
+	$(CC) -o $(FDF) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
 	@echo $(YELLOW)"@@@@@ fdf compiling done @@@@@"$(RESET)
 
 $(LIBFT):
@@ -61,7 +67,7 @@ $(LIBMLX):
 $(OBJ_DIR)%.o: $(SRCS_DIR)%.c
 	@echo $(GREEN)"Creating: $@"$(RESET)
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(INCLUDES) -c $< -o $@
+	$(CC) $(INCLUDES) -c $< -o $@
 
 clean:
 	@$(RM_DIR) $(OBJ_DIR)

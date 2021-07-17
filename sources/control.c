@@ -37,9 +37,8 @@ static int	mouse_press(int button, int x, int y, t_fdf *fdf)
 
 int	deal_keys(t_fdf *fdf)
 {
-	printf("%s", "aaa");
-	mlx_hook(fdf->win, 2, 0, press_key, fdf);
-	mlx_hook(fdf->win, 17, 0, close_window, NULL);
-	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
+	mlx_hook(fdf->win, 2, 1L, press_key, fdf);
+	mlx_hook(fdf->win, 17, 1L << 17, close_window, NULL);
+	mlx_hook(fdf->win, 4, 1L << 2, mouse_press, fdf);
 	return (0);
 }
