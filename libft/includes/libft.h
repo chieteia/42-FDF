@@ -8,6 +8,9 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <stdio.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 # define FAILED -1
 # define OK 1

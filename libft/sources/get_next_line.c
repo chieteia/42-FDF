@@ -7,17 +7,13 @@ static int	make_line_and_set_stock(char **line, char **buff, char **stock)
 
 	len = 0;
 	tmp = *stock;
-	while (*tmp && *tmp != '\n')
-	{
+	while (tmp[len] && tmp[len] != '\n')
 		len++;
-		tmp++;
-	}
-	*line = ft_substr(*stock, 0, len);
-	if (*tmp == '\n')
-		tmp++;
-	tmp = ft_substr(tmp, 0, ft_strlen(tmp));
-	safe_free((void **)stock);
-	*stock = tmp;
+	*line = ft_substr(tmp, 0, len);
+	if (tmp[len] == '\n')
+		len++;
+	*stock = ft_substr(&tmp[len], 0, ft_strlen(&tmp[len]));
+	free(tmp);
 	if (!line || !stock)
 	{
 		safe_free((void **)buff);
@@ -42,7 +38,11 @@ static int	make_buff(int fd, ssize_t *read_len, char **buff, char **stock)
 
 static int	make_stock(char **buff, char **stock)
 {
+	char	*tmp;
+
+	tmp = *stock;
 	*stock = ft_strjoin(*stock, *buff);
+	free(tmp);
 	if (*stock == NULL)
 	{
 		safe_free((void **)buff);
@@ -63,7 +63,7 @@ int	get_next_line(int fd, char **line)
 		return (-1);
 	if (!ft_malloc((void **)&buff, sizeof(char), BUFFER_SIZE + 1))
 		return (-1);
-	while (!ft_strchr(stock, '\n') && (read_len > 0))
+	while ((read_len > 0) && !ft_strchr(stock, '\n'))
 	{
 		if (make_buff(fd, &read_len, &buff, &stock) == FAILED)
 			return (-1);
