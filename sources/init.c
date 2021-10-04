@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ntoshihi <ntoshihi@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/04 22:04:41 by ntoshihi          #+#    #+#             */
+/*   Updated: 2021/10/04 22:04:42 by ntoshihi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 static t_map	*init_map(char *file_name)
@@ -43,15 +55,8 @@ static t_camera	*init_camera(t_map *map)
 	return (camera);
 }
 
-t_fdf	*init_fdf(char *file_name)
+static void	setup_mlx(t_fdf *fdf)
 {
-	t_fdf	*fdf;
-
-	fdf = malloc(sizeof(t_fdf));
-	if (!fdf)
-		terminate(ERR_MALLOC);
-	fdf->map = init_map(file_name);
-	fdf->camera = init_camera(fdf->map);
 	fdf->mlx = mlx_init();
 	if (!fdf->mlx)
 		terminate(ERR_MLX_INIT);
@@ -63,5 +68,19 @@ t_fdf	*init_fdf(char *file_name)
 		terminate(ERR_NEW_IMG);
 	fdf->addr = mlx_get_data_addr(fdf->img, &(fdf->bits_per_pixel), \
 									&(fdf->line_length), &(fdf->endian));
+	if (!fdf->addr)
+		terminate(ERR_GET_ADR);
+}
+
+t_fdf	*init_fdf(char *file_name)
+{
+	t_fdf	*fdf;
+
+	fdf = malloc(sizeof(t_fdf));
+	if (!fdf)
+		terminate(ERR_MALLOC);
+	fdf->map = init_map(file_name);
+	fdf->camera = init_camera(fdf->map);
+	setup_mlx(fdf);
 	return (fdf);
 }

@@ -1,6 +1,6 @@
-FDF			=	fdf
+NAME		=	fdf
 CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-g -Wall -Wextra -Werror
 
 INC_DIR		=	./
 SRCS_DIR	=	sources/
@@ -43,17 +43,17 @@ OBJ_FILES	=	$(SRCS_FILES:.c=.o)
 SRCS		=	$(addprefix $(SRCS_DIR),$(SRCS_FILES))
 OBJS		=	$(addprefix $(OBJ_DIR), $(OBJ_FILES))
 
-.PHONY: all clean fclean re db
+.PHONY: all clean fclean re bonus
 
-all: $(FDF)
+all: $(NAME)
 
 RED			=	"\033[31m"
 GREEN		=	"\033[32m"
 YELLOW		=	"\033[33m"
 RESET		=	"\033[0m"
 
-$(FDF): $(LIBFT) $(OBJS) $(LIBMLX)
-	$(CC) -o $(FDF) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
+$(NAME): $(LIBFT) $(OBJS) $(LIBMLX)
+	$(CC) -o $(NAME) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
 	@echo $(YELLOW)"@@@@@ fdf compiling done @@@@@"$(RESET)
 
 $(LIBFT):
@@ -78,7 +78,9 @@ clean:
 fclean:	clean
 	@$(RM) $(LIBFT)
 	@echo $(RED)"REMOVE $(LIBFT)"$(RESET)
-	@$(RM) $(FDF)
-	@echo $(RED)"REMOVE $(FDF)"$(RESET)
+	@$(RM) $(NAME)
+	@echo $(RED)"REMOVE $(NAME)"$(RESET)
 
 re:	fclean all
+
+bonus: all
