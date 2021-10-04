@@ -25,7 +25,10 @@ int	check_end_conditions(int res, char *line)
 	if (res < 0)
 		terminate(ERR_READ_MAP);
 	if (res == 0 && !*line)
+	{
+		free(line);
 		return (0);
+	}
 	else
 		return (1);
 }
