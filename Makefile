@@ -43,8 +43,6 @@ OBJ_FILES	=	$(SRCS_FILES:.c=.o)
 SRCS		=	$(addprefix $(SRCS_DIR),$(SRCS_FILES))
 OBJS		=	$(addprefix $(OBJ_DIR), $(OBJ_FILES))
 
-.PHONY: all clean fclean re bonus
-
 all: $(NAME)
 
 RED			=	"\033[31m"
@@ -53,7 +51,7 @@ YELLOW		=	"\033[33m"
 RESET		=	"\033[0m"
 
 $(NAME): $(LIBFT) $(OBJS) $(LIBMLX)
-	$(CC) -o $(NAME) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
+	@$(CC) -o $(NAME) $(OBJS) $(LIBFT) $(LIBMLX) $(LXFLAGS)
 	@echo $(YELLOW)"@@@@@ fdf compiling done @@@@@"$(RESET)
 
 $(LIBFT):
@@ -67,7 +65,7 @@ $(LIBMLX):
 $(OBJ_DIR)%.o: $(SRCS_DIR)%.c
 	@echo $(GREEN)"Creating: $@"$(RESET)
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(INCLUDES) -c $< -o $@
+	@$(CC) $(INCLUDES) -c $< -o $@
 
 clean:
 	@$(RM_DIR) $(OBJ_DIR)
@@ -84,3 +82,5 @@ fclean:	clean
 re:	fclean all
 
 bonus: all
+
+.PHONY: all clean fclean re bonus

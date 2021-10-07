@@ -6,7 +6,7 @@
 /*   By: ntoshihi <ntoshihi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 22:04:41 by ntoshihi          #+#    #+#             */
-/*   Updated: 2021/10/04 22:04:42 by ntoshihi         ###   ########.fr       */
+/*   Updated: 2021/10/07 12:44:36 by ntoshihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ static t_camera	*init_camera(t_map *map)
 	camera->zoom = int_min(SCREEN_WIDTH / map->width / 2, \
 						SCREEN_HEIGHT / map->height / 2);
 	camera->z_divisor = 1;
-	camera->shift_x = 480;
-	camera->shift_y = 270;
+	camera->shift_x = 450;
+	camera->shift_y = 350;
 	camera->alpha = 0;
 	camera->beta = 0;
 	camera->gamma = 0;
